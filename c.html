@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="css/confirmation.css" />
+  </head>
+  <body>
+    <h1>Thank You for Your Purchase!</h1>
+    <p>Your order has been successfully processed.</p>
+    <p>
+      We appreciate your trust in us and are preparing your items for shipment.
+    </p>
+    <h3>Order Summary:</h3>
+    <div id="order-summary">
+      <!-- Order details will be populated here -->
+    </div>
+
+    <button onclick="goToHome()">Back to Home</button>
+
+    <script>
+      // Load order details from localStorage if any
+      const orderSummaryDiv = document.getElementById("order-summary");
+      const cart = JSON.parse(localStorage.getItem("cart"));
+
+      // Display ordered items if cart exists
+      if (cart && cart.length > 0) {
+        cart.forEach((item) => {
+          orderSummaryDiv.innerHTML += `
+          <div class="order-item">
+            <p><strong>${item.name}</strong> (Size: ${item.size}) - Rp.${item.price} x ${item.quantity}</p>
+          </div>
+        `;
+        });
+      } else {
+        orderSummaryDiv.innerHTML = "<p>No items in your order.</p>";
+      }
+
+      // Clear the cart data after showing confirmation
+      localStorage.removeItem("cart");
+
+      // Redirect to home page
+      function goToHome() {
+        window.location.href = "index.html"; // Replace with your actual homepage
+      }
+    </script>
+  </body>
+</html>

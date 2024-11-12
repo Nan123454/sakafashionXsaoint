@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment</title>
+    <link rel="stylesheet" href="css/payment.css" />
+  </head>
+  <body>
+    <h1>Payment</h1>
+    <h3>Total Amount: <span id="total-amount">0</span></h3>
+
+    <h3>Select Payment Method:</h3>
+    <form id="payment-form">
+      <label>
+        <input
+          type="radio"
+          name="payment-method"
+          value="credit-card"
+          required
+        />
+        <img
+          src="icon/credit-card.png"
+          alt="Credit Card"
+          class="payment-icon"
+        />
+        Credit Card </label
+      ><br />
+      <label>
+        <input
+          type="radio"
+          name="payment-method"
+          value="bank-transfer"
+          required
+        />
+        <img src="icon/symbols.png" alt="Bank Transfer" class="payment-icon" />
+        Bank Transfer </label
+      ><br />
+      <label>
+        <input type="radio" name="payment-method" value="e-wallet" required />
+        <img src="icon/ewallet.png" alt="E-Wallet" class="payment-icon" />
+        E-Wallet </label
+      ><br />
+      <button type="submit">Proceed with Payment</button>
+    </form>
+
+    <script>
+      // Load total price from localStorage
+      const totalAmountSpan = document.getElementById("total-amount");
+      const totalPrice = JSON.parse(localStorage.getItem("totalPrice"));
+      totalAmountSpan.innerText = `Rp.${totalPrice}`;
+
+      // Handle payment submission
+      document
+        .getElementById("payment-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const paymentMethod = document.querySelector(
+            'input[name="payment-method"]:checked'
+          ).value;
+
+          // Clear cart and redirect to confirmation
+          localStorage.removeItem("cart");
+          localStorage.removeItem("totalPrice");
+
+          alert(
+            `Payment successful with ${paymentMethod}! Thank you for your purchase.`
+          );
+          window.location.href = "c.html"; // Redirect to a confirmation page
+        });
+    </script>
+  </body>
+</html>

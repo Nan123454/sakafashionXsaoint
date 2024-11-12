@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" href="css/cart.css" />
+  </head>
+  <body>
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <h3>Total: <span id="total-price">0</span></h3>
+    <button id="checkout-btn">Checkout</button>
+
+    <script>
+      // Load cart from localStorage
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsDiv = document.getElementById("cart-items");
+      const totalPriceSpan = document.getElementById("total-price");
+
+      // Initialize total price
+      let total = 0;
+
+      // Render cart items
+      function renderCart() {
+        cartItemsDiv.innerHTML = "";
+        total = 0; // Reset total each time renderCart is called
+
+        cart.forEach((item, index) => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
+
+          cartItemsDiv.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" />
+            <h3>${item.name} (Ukuran: ${item.size}) - Rp.${item.price} x ${item.quantity} = Rp.${itemTotal}</h3>
+            <button class="remove-btn" data-index="${index}">Remove</button>
+          </div>
+        `;
+        });
+
+        totalPriceSpan.innerText = `Rp.${total.toFixed(0)}`;
+      }
+
+      // Remove item from cart
+      document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("remove-btn")) {
+          const index = event.target.getAttribute("data-index");
+          cart.splice(index, 1);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          renderCart();
+        }
+      });
+
+      // Render cart on page load
+      renderCart();
+
+      // Checkout button action
+      document
+        .getElementById("checkout-btn")
+        .addEventListener("click", function () {
+          if (cart.length === 0) {
+            alert("Your cart is empty!");
+          } else {
+            // Save the total price and redirect to payment page
+            localStorage.setItem("totalPrice", JSON.stringify(total));
+            window.location.href = "payment.html";
+          }
+        });
+    </script>
+  </body>
+</html>
